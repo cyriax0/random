@@ -38,9 +38,13 @@ void setBrightness(int raw_value){
 
 int main(int argc, char * argv[]){
     if (argc != 2){
-        cout << "Usage:\n\tbrightness [+-][NUMBER]%" << endl;
+        cout << "Usage:\n\tbrightness [+-][NUMBER]%\n\tbrightness get" << endl;
     } else if (argc == 2){
         string argument(argv[1]);
+        if (argument == "get"){
+            cout << (getBrightness()*100/getMaxBrightness()) << "%" << endl;
+            return 0;
+        }
         smatch match;
         regex expression(INPUT_SEPARATOR);
         if (regex_search(argument,match,expression)){
