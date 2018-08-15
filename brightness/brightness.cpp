@@ -34,7 +34,7 @@ void setBrightness(int raw_value){
 
 
 
-#define INPUT_SEPARATOR "(([+-]?)[[:digit:]]*)%"
+#define INPUT_SEPARATOR "(([+-]?)[[:digit:]]*)(%?)"
 
 int main(int argc, char * argv[]){
     if (argc != 2){
@@ -50,15 +50,25 @@ int main(int argc, char * argv[]){
         if (regex_search(argument,match,expression)){
             int number = stoi(match[1]);
             bool absolute = (match[2] == "");
+            bool percentage = (match[3] == "%");
             int max_brightness = getMaxBrightness();
             int target_brightness;
-            if (absolute){
-                target_brightness = max_brightness*number/100;
+            if (percentage){
+                if (absolute){
+                    target_brightness = max_brightness*number/100;
+                } else {
+                    target_brightness = getBrightness() + max_brightness*number/100;
+                }
             } else {
-                target_brightness = getBrightness() + max_brightness*number/100;
+                if (absolute){
+                    target_brightness = number;
+                } else {
+                    target_brightness = getBrightness() + number;
+                }
             }
-            if (target_brightness < 0) target_brightness = 0;
+            if (target_brightness <= 0) target_brightness = 1;
             if (target_brightness > max_brightness) target_brightness = max_brightness;
+            if (absolute && number == 0) target_brightness = 0;
             setBrightness(target_brightness);
         } else {
             cout << "Could not parse: "<< argument << endl;
