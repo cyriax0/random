@@ -42,7 +42,7 @@ int main(int argc, char * argv[]){
     } else if (argc == 2){
         string argument(argv[1]);
         if (argument == "get"){
-            cout << (getBrightness()*100/getMaxBrightness()) << "%" << endl;
+            cout << getBrightness() << endl;
             return 0;
         }
         smatch match;
